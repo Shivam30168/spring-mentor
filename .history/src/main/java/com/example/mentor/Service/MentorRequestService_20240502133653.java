@@ -1,6 +1,5 @@
 package com.example.mentor.Service;
 
-
 import java.util.List;
 import java.util.Optional;
 
@@ -10,9 +9,6 @@ import org.springframework.stereotype.Service;
 import com.example.mentor.Models.Mentor;
 import com.example.mentor.Models.MentorRequest;
 import com.example.mentor.Repository.MentorRequestRepository;
-
-
-
 
 @Service
 public class MentorRequestService {
@@ -28,35 +24,32 @@ public class MentorRequestService {
             mRequest.setStatus("disapproved");
             return mentorRequestRepository.save(mRequest);
         }
-        return null; 
+        return null;
     }
 
-    public List<MentorRequest> getallmentorRequests(){
+    public List<MentorRequest> getallmentorRequests() {
         return mentorRequestRepository.findAll();
     }
 
-    public Mentor approveReq(int mentorid){
-        Optional<MentorRequest> mentordata=mentorRequestRepository.findById(mentorid);
-        if (mentordata.isPresent()) 
-        {
-            MentorRequest mentorRequest=mentordata.get();
-            Mentor m=new Mentor(mentorid, mentorRequest.getName(), mentorRequest.getMobileno(), mentorRequest.getAge(), mentorRequest.getGender(), mentorRequest.getJobrole());
+    public Mentor approveReq(int mentorid) {
+        Optional<MentorRequest> mentordata = mentorRequestRepository.findById(mentorid);
+        if (mentordata.isPresent()) {
+            MentorRequest mentorRequest = mentordata.get();
+            Mentor m = new Mentor(mentorid, mentorRequest.getName(), mentorRequest.getMobileno(),
+                    mentorRequest.getAge(), mentorRequest.getGender(), mentorRequest.getJobrole());
             mentorRequestRepository.deleteById(mentorid);
             return mentorService.addMentor(m);
-        }
-        else
-        {
+        } else {
             return null;
         }
     }
 
-    public int disApproveReq(int mentorid)
-    {
+    public int disApproveReq(int mentorid) {
         return mentorRequestRepository.deleteByMentorid(mentorid);
     }
 
     public List<MentorRequest> searchMentorRequestByName(String Term) {
         return mentorRequestRepository.findByNameContainingIgnoreCase(Term);
     }
-    
+
 }
