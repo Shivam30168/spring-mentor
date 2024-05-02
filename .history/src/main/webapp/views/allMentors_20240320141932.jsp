@@ -1,0 +1,106 @@
+<%@ page import="com.example.mentor.Models.Mentor" %>
+<%@ page import="java.util.List" %>
+
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>   
+<head>
+    <title>All Mentor Requests</title>
+    <jsp:include page="components/allcdn.jsp" />
+    <style>
+      .container{
+        margin-top: 10px;
+      }
+      body{
+        background: linear-gradient(45deg, #b7eaff, #e1f5fe);;
+      }
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+        h1{
+            text-align: center;
+        }
+        .message {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 4px;
+            width: fit-content;
+            color: green;
+        }
+    </style>
+</head>
+<body>
+    <jsp:include page="components/Navbar.jsp" />
+    <h1>All Mentor </h1>
+    <form id="searchForm"> <!-- Added an ID to the form for easy reference -->
+      <label for="name">Search By Name</label>
+      <input type="search" id="searchInput" name="searchName"> <!-- Added ID to input field -->
+  </form>
+    <div class="container">
+        <table class="table table-striped table-hover">
+          <thead class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Mobile No</th>
+                <th>Age</th>
+                <th>Gender</th>
+                <th>Job Role</th>
+                <th>Action</th>
+                
+            </tr>
+        </thead>
+        <tbody>
+            <% List<Mentor> mr=(List<Mentor>)request.getAttribute("allmentor");
+                for(Mentor m:mr)
+                {
+                %>
+                <tr>
+                  <td>
+                    <%=m.getId()%>
+                  </td>
+                  <td>
+                    <%=m.getName()%>
+                  </td>
+                  <td>
+                    <%=m.getAge()%>
+                  </td>
+                  <td>
+                    <%=m.getGender()%>
+                  </td>
+                  <td>
+                    <%=m.getJobrole()%>
+                  </td>
+                  <td>
+                    <%=m.getMobileno()%>
+                  </td>  
+                  <td>
+                    <a href="/deletementor?id=<%=m.getId()%>">
+                      <button class="btn btn-danger">Delete</button></a>              
+                </tr>
+                <% } %>
+        </tbody>
+    </table>
+    </div>
+    <% if (request.getAttribute("deletemessage") != null) { 
+      String message = (String) request.getAttribute("deletemessage");
+  %>
+      <div class="message " >
+          <%= message %>
+      </div>
+  <% } %>
+  <script>
+    document.getElementById('searchInput').addEventListener('input', function() {
+        var searchQuery = this.value.trim(); // Get the trimmed value of the input field
+        if (searchQuery.length >= 3) { // Optionally, add a minimum character limit before triggering search
+            // Form the search URL with the query
+            var searchUrl = 'searchMentor?searchName=' + encodeURIComponent(searchQuery);
+            // Redirect to the search URL
+            window.location.href = searchUrl;
+        }
+    });
+</script>
+</body>
+</html>
